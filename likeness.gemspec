@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Andrew Clarke"]
   s.email       = 'a.andrew.clarke@gmail.com'
   s.files       = ["likeness.rb"]
-  s.homepage    = 'https://rubygems.org/gems/likeness'
+  s.homepage    = 'https://rubygems.org/gems/likeness://rubygems.org/gems/likeness'
   s.license     = 'MIT'
 end
 
