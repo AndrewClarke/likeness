@@ -16,7 +16,7 @@ in the response.
 Release 1.0.0 offers
 
 ```ruby
-measure = similarity(str1, str2, width: 2, splitter: /\W+/) { |str| str.downcase.gsub(/(?<=\w)'/, '') }
+compar = Likeness.new(str1, str2, width: 2, splitter: /\W+/) { |str| str.downcase.gsub(/(?<=\w)'/, '') }
 # TODO: correct method list.
 ```
 
