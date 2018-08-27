@@ -55,5 +55,25 @@ class Likeness
                  .flatten
                     .sort
   end  # shingles
+
+
+  def subject(str)
+    return Likeness::Subject.new(self, str)
+  end  # subject
+
+
+  class Subject
+    def initialize(compar, str)
+      @compar = compar
+      @subject = @compar.shingles(str)
+    end  # initialize
+
+
+    def match(str)
+      return Likeness::match(@subject, @compar.shingles(str))
+    end  # match
+
+    alias_method :[], :match    # a sussinct alternative to .match
+  end  # Likeness::Subject::
 end  # Likeness::
 

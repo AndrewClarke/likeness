@@ -56,17 +56,75 @@ The default settings for canonicalisation means that
 empty strings or strings containing only blanks
 are all equivalent.
 
-## Samples
+## Constructor samples
 
 ```ruby
 require 'likeness'
 
+# Everything defaulted
 compar = Likeness.new
+
+# My data is very samey, I'll try bigger shingles.
+compar = Likeness.new(width: 3)
+
+# Ignore digits - so split on them will do the trick...
+compar = Likeness(splitter: /[\d\W]+/)
+
+# I only want to downcase. Apostrophes can split the words
+compar = Likeness { |str| str.downcase }
+
+# A short-form of the previous downcase option
+compar = Likeness(&:downcase)
+
+# I am reading a CSV, and all characters need to be significant.
+# Even uppercase is significant, so pass a no-op kind of block.
+# NOTE: this is actually a weak way to split CSV files. Sigh.
+compar = Likeness(splitter: /,/) { |str| str }
+```
+
+## Comparison samples
+
+```ruby
+require 'likeness'
+
+compar = Likeness.new   # using the defaults for the examples
+
+compar.match("abcdefg", "acdeg")  => 0.4
+compar.match("abcdefg", "abcefg") => 0.7272727272727273
+compar.match("abcdefg", "ABCDFG") => 0.7272727272727273
+compar.match("abcdefg", "abcdef") => 0.9090909090909091
+compar.match("abcdefg", "abcdefg") => 1.0
+compar.match("ABCDEFG", "abcdefg") => 1.0
+```
+
+## Comparison samples using the short-form
+
+```ruby
+require 'likeness'
+
+compar = Likeness.new   # using the defaults for the examples
+
 compar["abcdefg", "acdeg"]  => 0.4
 compar["abcdefg", "abcefg"] => 0.7272727272727273
-compar["abcdefg", "abcdef"] => 0.9090909090909091
 compar["abcdefg", "ABCDFG"] => 0.7272727272727273
+compar["abcdefg", "abcdef"] => 0.9090909090909091
+compar["abcdefg", "abcdefg"] => 1.0
+compar["ABCDEFG", "abcdefg"] => 1.0
+```
 
-TODO: more samples
+## Creating a Subject object
+
+```ruby
+require 'likeness'
+
+compar = Likeness.new   # using the defaults for the examples
+FACTOR = 0.6
+
+list_of_1_thousand_words.each do |str1|
+  sub = compar.subject(str1)
+  list_of_2_thousand_words.select { |str2| sub.match(str2) > FACTOR }.each do |str2|
+    big_function(str1, str2)
+  end
+end
 ```
 
